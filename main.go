@@ -16,6 +16,7 @@ func main(){
 	http.HandleFunc("/api/cabinet/auth/login", PostLoginHandler)
 	http.HandleFunc("/api/cabinet/orders/{id}/comment", PostCommentHandler)
 	http.HandleFunc("/api/cabinet/profile", GetProfileHandler)
+	http.HandleFunc("/api/cabinet/orders/{id}/documents", GetDocumentsHandler)
 
 	
 	// работа и запуск сервера
