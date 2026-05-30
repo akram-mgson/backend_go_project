@@ -131,5 +131,15 @@ func GetProfileHandler(w http.ResponseWriter, r *http.Request){
 
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		json.NewEncoder(w).Encode(profile)
-	}
+}
 	
+
+func GetDocumentsHandler(w http.ResponseWriter, r *http.Request){
+	if r.Method != http.MethodGet{
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w). Encode(ErrorResp{Code: "METHOD_NOT_ALLOWED", Message: "Статус не доступен"})
+		return 
+	}
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		json.NewEncoder(w).Encode(documents)
+}
