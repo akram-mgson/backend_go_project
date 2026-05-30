@@ -143,3 +143,27 @@ func GetDocumentsHandler(w http.ResponseWriter, r *http.Request){
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		json.NewEncoder(w).Encode(documents)
 }
+func PostLogoutHandler(w http.ResponseWriter, r *http.Request){
+	if r.Method != http.MethodPost{
+	w.WriteHeader(http.StatusMethodNotAllowed)
+	json.NewEncoder(w). Encode(ErrorResp{Code: "METHOD_NOT_ALLOWED", Message: "Метод не поддерживается"})
+	return
+}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	json.NewEncoder(w).Encode(SuccessResp{Message: "Logged out"})
+
+}
+
+func GetAuthHandler(w http.ResponseWriter, r *http.Request){
+	
+
+	if r.Method != http.MethodGet{
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w). Encode(ErrorResp{Code: "METHOD_NOT_ALLOWED", Message: "Метод не поддерживается"})
+		return
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	// создал переменную в обработчике
+	user := Auth{Name: "Ivan", Email: "i_ivanov@test.com"}
+	json.NewEncoder(w).Encode(user)
+}
