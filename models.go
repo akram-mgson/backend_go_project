@@ -36,3 +36,13 @@ type Comment struct{
 	Text	string `json:"text"`
 
 	}
+type Document struct {
+	ID    int
+	Title string
+	Body  string
+}
+
+type Auth struct{
+	Name	string	`json:"name"`
+	Email	string	`json:"i_ivanov@test.com"`	
+}
