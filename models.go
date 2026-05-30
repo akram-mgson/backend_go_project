@@ -24,6 +24,13 @@ type SuccessResp struct{
 	Message string `json:"message"`
 }
 
+type Document struct {
+	ID    int
+	Title string
+	Body  string
+}
+
+
 
 type Comment struct{
 	Text	string `json:"text"`
