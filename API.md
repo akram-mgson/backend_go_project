@@ -66,7 +66,7 @@ GET /api/cabinet/profile
 
 Клиент видит свои данные
 
-
+TODO / planned
 Метод / Путь
 POST /api/cabinet/auth/logout
 Ответ - {"message": "logged out"}
@@ -77,7 +77,7 @@ UNAUTHORIZED (401) - нет токена
 
 
 
-
+TODO / planned
 Метод / Путь
 GET/ api/cabinet/auth/me
 Ответ - {"name": "Ivan", "email": "i_ivanov@test.ru", "area": "project-manager"}
