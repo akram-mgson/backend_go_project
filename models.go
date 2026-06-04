@@ -24,10 +24,16 @@ type SuccessResp struct{
 	Message string `json:"message"`
 }
 
+type Comment struct {
+	Text string `json:"text"`
+}
+
+
 type Document struct {
 	ID    int 		`json:"id"`
 	Title string	`json:"title"`
 	Body  string	`json:"body"`
+	OrderID int    `json:"orderid"`
 }
 
 
@@ -36,13 +42,16 @@ type Comment struct{
 	Text	string `json:"text"`
 
 	}
-type Document struct {
-	ID    int
-	Title string
-	Body  string
-}
 
 type Auth struct{
 	Name	string	`json:"name"`
 	Email	string	`json:"i_ivanov@test.com"`	
 }
+
+type LoginRequest struct {
+	Login    string `json:"login"`
+	Password string `json:"password"`
+}
+
+
+
