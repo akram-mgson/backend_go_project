@@ -5,9 +5,10 @@ var profile = Info{PhoneNumber: "11111111", Email: "i_ivanov@example.ru", Manage
 var orders = []Order{
 	{ID: 40364, Title: "Заказ №1", StageID: "C1:NEW"},
 	{ID: 40365, Title: "Заказ №2", StageID: "C1:WON"},
+	{ID: 40366, Title: "Заказ №3", StageID: "C1:ADD"},
 }
 
 
 var documents = []Document{
-	{ID: 1, Title: "Спецификация", Body: "Документ пока недоступен "},
+	{ID: 1, Title: "Спецификация", Body: "Документ запущен", OrderID: 40366},
 }
