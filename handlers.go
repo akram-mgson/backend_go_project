@@ -120,9 +120,41 @@ func GetDocumentsHandler(w http.ResponseWriter, r *http.Request){
 		json.NewEncoder(w). Encode(ErrorResp{Code: "METHOD_NOT_ALLOWED", Message: "Статус не доступен"})
 		return 
 	}
+	id := r.PathValue("id")
+	id2, err := strconv.Atoi(id)
+	if err != nil {
+	
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		json.NewEncoder(w).Encode(documents)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(ErrorResp{Code: "INVALID_REQUEST", Message: "Неверный запрос"})
+		return
 }
+	var res bool
+	for _, Order := range orders {
+
+		if Order.ID == id2 {
+			res = true
+			break
+		}
+	}
+	if res == false {
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(ErrorResp{Code: "ORDER_NOT_FOUND", Message: "Заказ не найден"})
+		return
+	}
+
+	var filtered []Document
+	for _, doc := range documents {
+		if doc.OrderID == id2 {
+			filtered = append(filtered, doc)
+		}
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	json.NewEncoder(w).Encode(filtered)
+	return
+}
+	
 func PostLogoutHandler(w http.ResponseWriter, r *http.Request){
 	if r.Method != http.MethodPost{
 	w.WriteHeader(http.StatusMethodNotAllowed)
