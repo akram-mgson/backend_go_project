@@ -63,7 +63,7 @@ METHOD_NOT_ALLOWED (405) - если не устанавливаем POST
 INVALID_CREDENTIALS (401) - неправильный логин или пароль
 
 
-{"code": "METHOD_NOT_ALLOWED", "message": "Заказ не найден"}
+{"code": "METHOD_NOT_ALLOWED", "message": "Метод не поддерживается"}
 {"code": "INVALID_CREDENTIALS", "message": "Неправильный логин и пароль"}
 
 
@@ -91,7 +91,7 @@ UNAUTHORIZED (401) - нет токена
 
 //TODO / planned
 Метод / Путь
-GET/ api/cabinet/auth/me
+GET /api/cabinet/auth/me
 Ответ - {"name": "Ivan", "email": "i_ivanov@test.ru", "area": "project-manager"}
 Ошибки:
 UNAUTHORIZED (401) - Запрос отклонен из-за отсутствия, недействительности, просрочки утечки данных
