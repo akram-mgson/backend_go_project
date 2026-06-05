@@ -21,6 +21,9 @@ GET /api/cabinet/orders/{id} - карточка заказов
 INVALID_REQUEST (400) - браузер отправил запрос на сайт с ошибкой
 ORDER_NOT_FOUND (404) - страница или файл не найдены
 
+{"code": "INVALID_REQUEST", "message": "Неверный запрос"}
+{"code": "ORDER_NOT_FOUND", "message": "Заказ не найден"}
+
 Пользовательский интерфейс:
 
 Клиент видит конкретные разделы, такие как, номер, статус, оборудование
@@ -30,7 +33,8 @@ ORDER_NOT_FOUND (404) - страница или файл не найдены
 Метод / Путь
 POST /api/cabinet/orders/{id}/comment
 Ответ - {"message": "comment sent"}
-Ошибки - INVALID_REQUEST (400) - Неправильный запрос
+Ошибки - VALIDATION_ERROR (400) - Неправильный запрос
+{"code": "VALIDATION_ERROR", "message": "Неправильный запрос"}
 
 
 Метод / Путь
@@ -53,15 +57,21 @@ Errors:
 
 
 Ответ - {"token": "fake-token"}
-Ошибки - METHOD_NOT_ALLOWED (405) - если не устанавливаем POST
+
+Ошибки:
+METHOD_NOT_ALLOWED (405) - если не устанавливаем POST
+INVALID_CREDENTIALS (401) - неправильный логин или пароль
+
+
+{"code": "METHOD_NOT_ALLOWED", "message": "Заказ не найден"}
+{"code": "INVALID_CREDENTIALS", "message": "Неправильный логин и пароль"}
 
 
 Метод / Путь
 GET /api/cabinet/profile
-
 Ответ - {"phone_number":"11111111","email":"i_ivanov@example.ru","manager":"Ivan Ivanov"}
-
-Ошибки - METHOD_NOT_ALLOWED
+Ошибки - METHOD_NOT_ALLOWED (405)
+{"code": "METHOD_NOT_ALLOWED", "message": "Метод не поддерживается"}
 
 
 Клиент видит свои данные
@@ -74,10 +84,12 @@ POST /api/cabinet/auth/logout
 METHOD_NOT_ALLOWED (405) - если метод не POST
 UNAUTHORIZED (401) - нет токена
 Клиент имеет возможность выйти из платформы
+{"code": "METHOD_NOT_ALLOWED", "message": "Метод не поддерживается"}
+{"code": "UNAUTHORIZED", "message": "Не авторизован"}
 
 
 
-TODO / planned
+//TODO / planned
 Метод / Путь
 GET/ api/cabinet/auth/me
 Ответ - {"name": "Ivan", "email": "i_ivanov@test.ru", "area": "project-manager"}
@@ -86,13 +98,22 @@ UNAUTHORIZED (401) - Запрос отклонен из-за отсутстви�
 ACCESS_DENIED (403) - нет прав
 METHOD_NOT_ALLOWED (405) - если метод не GET
 
+{"code": "UNAUTHORIZED", "message": "Не авторизован"}
+{"code": "ACCESS_DENIED", "message": "Доступ запрещен"}
+{"code": "METHOD_NOT_ALLOWED", "message": "Метод не доступен"}
+
+
 Клиент имеет доступ к платформе при успешной авторизации
 
 Метод / Путь
-GET/api/cabinet/orders/{id}/documents
-Ответ - {"message": "document is not available"}
-Ошибки - VALIDATION_ERROR (ошибка валидации)
+GET /api/cabinet/orders/{id}/documents
+Ответ - [{ID: 1, Title: "Спецификация", Body: "В процессе", OrderID: 40366}]
+Ошибки:
+INVALID_REQUEST - 400 (если id - не число)
+ORDER_NOT_FOUND (отсутствие заказа)
 Клиент видит список документов, привязанных к определенному заказу
+
+{"code": "INVALID_REQUEST", "message": "Ошибка валидации"}
 
 
 
