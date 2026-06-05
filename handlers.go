@@ -65,6 +65,23 @@ func PostLoginHandler(w http.ResponseWriter, r *http.Request){
 		json.NewEncoder(w).Encode(ErrorResp{Code: "METHOD_NOT_ALLOWED", Message: "Запрашиваемый адрес не поддерживает HTTP метод"})
 		return
 		}
+
+		
+		var login LoginRequest
+		
+		bodyLogin, err := io.ReadAll(r.Body)
+		if err != nil{ 
+		defer r.Body.Close()
+		}
+		err = json.Unmarshal(bodyLogin, &login)
+
+		if login.Login != "client@example.com" || login.Password != "password"{
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(ErrorResp{Code: "INVALID_CREDENTIALS", Message: "Неправильный логин или пароль"})
+		return
+		}
+	
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		json.NewEncoder(w).Encode(map[string]string{"token": "fake-token"})
 	}
