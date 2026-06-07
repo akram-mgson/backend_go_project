@@ -8,7 +8,13 @@ var orders = []Order{
 	{ID: 40366, Title: "Заказ №3", StageID: "C1:ADD"},
 }
 
-
 var documents = []Document{
-	{ID: 1, Title: "Спецификация", Body: "Документ запущен", OrderID: 40366},
+	//{ID: 1, Title: "Спецификация", Body: "Документ пока недоступен"},
+
+	{ID: 1, Title: "Спецификация", Body: "В процессе", OrderID: 40366},
+}
+
+var login = []LoginRequest{
+	{Login:"client@example.com", Password:"password"},
+	
 }
