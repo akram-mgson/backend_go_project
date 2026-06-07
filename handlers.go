@@ -37,7 +37,7 @@ func GetIdHandler(w http.ResponseWriter, r *http.Request){
 
 		for _, current := range orders {
 
-			// сравнение заказа с тем, что пришло в запросе
+			
 			if current.ID == idInt {
 				writeJSON(w, http.StatusOK, current)
 				return
@@ -65,13 +65,6 @@ func PostLoginHandler(w http.ResponseWriter, r *http.Request){
 		writeError(w, http.StatusUnauthorized, "INVALID_CREDENTIALS", "Неправильный логин или пароль")
 		return
 		}
-		// if err != nil{
-		// 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		// 	w.WriteHeader(http.StatusBadRequest)
-		// 	json.NewEncoder(w).Encode(ErrorResp{Code: "VALIDATION_ERROR", Message: "Ошибка валидации"})
-		// 	//json.NewEncoder(w).Encode(map[string]string{"token": "fake-token"})
-		// 	return
-		// }
 
 		writeJSON(w, http.StatusOK, map[string]string{"token": "fake-token"})
 	}
@@ -95,7 +88,7 @@ func PostCommentHandler(w http.ResponseWriter, r *http.Request){
 			return
 		}
 
-		// обращаюсь к полю Text структуры Comment
+		
 		if comment.Text == ""{
 			writeError(w, http.StatusBadRequest, "VALIDATION_ERROR", "Комментарий не должен быть пустым")
 			return
@@ -124,13 +117,6 @@ func GetDocumentsHandler(w http.ResponseWriter, r *http.Request){
 		writeError(w, http.StatusBadRequest, "INVALID_REQUEST", "Неверный запрос")
 		return
 	}
-		// for _, doc := range documents{
-		// 	if doc.OrderID == id2{
-		// 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		// 		json.NewEncoder(w).Encode(documents)
-		// 	}
-			
-		//}
 		
 		var res bool
 		for _, Order := range orders{
