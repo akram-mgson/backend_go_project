@@ -33,7 +33,7 @@ type Document struct {
 	ID    int 		`json:"id"`
 	Title string	`json:"title"`
 	Body  string	`json:"body"`
-	OrderID int    `json:"orderid"`
+	OrderID int     `json:"order_id"`
 }
 
 
