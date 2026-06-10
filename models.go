@@ -43,10 +43,11 @@ type Comment struct{
 
 	}
 
-type Auth struct{
-	Name	string	`json:"name"`
-	Email	string	`json:"i_ivanov@test.com"`	
+type Auth struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
+
 
 type LoginRequest struct {
 	Login    string `json:"login"`
