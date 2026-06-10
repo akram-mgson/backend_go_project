@@ -134,7 +134,7 @@ func GetDocumentsHandler(w http.ResponseWriter, r *http.Request){
 
 
 				
-			var filtered [] Document
+			filtered := make([]Document, 0)
 			for _, doc := range documents{
 				if doc.OrderID == id2{
 					filtered = append(filtered, doc)
