@@ -54,12 +54,12 @@ func PostLoginHandler(w http.ResponseWriter, r *http.Request){
 		}
 
 		var login LoginRequest
-		
-		bodyLogin, err := io.ReadAll(r.Body)
+
+		err := json.NewDecoder(r.Body).Decode(&login)
 		if err != nil{ 
-		defer r.Body.Close()
+			writeError(w, http.StatusBadRequest, "VALIDATION_ERROR", "Неправильный запрос")
+			return
 		}
-		err = json.Unmarshal(bodyLogin, &login)
 
 		if login.Login != "client@example.com" || login.Password != "password"{
 		writeError(w, http.StatusUnauthorized, "INVALID_CREDENTIALS", "Неправильный логин или пароль")
