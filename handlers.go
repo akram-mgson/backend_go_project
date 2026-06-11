@@ -71,11 +71,28 @@ func PostLoginHandler(w http.ResponseWriter, r *http.Request){
 
 
 func PostCommentHandler(w http.ResponseWriter, r *http.Request){
+	id := r.PathValue("id")
 		if r.Method != http.MethodPost {
 		writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "Метод не поддерживается")
 		return
 	}
-	
+	idInt2, err := strconv.Atoi(id)
+	if err != nil{
+			writeError(w, http.StatusBadRequest, "INVALID_REQUEST", "Некорректный запрос")
+			return
+	}
+	var found bool
+	for _, new_current := range orders{
+		if new_current.ID == idInt2{
+			found = true
+			break
+		}
+	}
+	if found == false{
+		writeError(w, http.StatusNotFound, "ORDER_NOT_FOUND", "Заказ не найден")
+		return
+	}
+
 		
 		var comment Comment
 		defer r.Body.Close()
