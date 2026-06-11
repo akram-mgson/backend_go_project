@@ -89,9 +89,36 @@ func PostCommentHandler(w http.ResponseWriter, r *http.Request){
 		}
 	}
 	if found == false{
-		writeError(w, http.StatusNotFound, "ORDER_NOT_FOUND", "Заказ не найден")
+		writeError(w, http.StatusNotFound, "STATUS_NOT_FOUND", "Статус не найден")
 		return
 	}
+
+	
+	if r.Method != http.MethodPost{
+		writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "Метод не найден")
+		return
+	}
+	id = r.PathValue("id")
+
+	idInt2, err = strconv.Atoi(id)
+
+	if err != nil{
+			writeError(w, http.StatusBadRequest, "INVALID_REQUEST", "Неверный запрос")
+		return
+	}
+
+
+	for _, new_current := range orders{
+		if new_current.ID == idInt2{
+			found = true
+			break
+		}
+	}
+	if found == false{
+		writeError(w, http.StatusNotFound, "ORDER_NOT_FOUND", "Заказ не найден")
+		return 
+	}
+
 
 		
 		var comment Comment
