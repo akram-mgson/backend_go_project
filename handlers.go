@@ -1,44 +1,49 @@
 package main
 
 import (
-    "encoding/json"
-    "io"
-    "net/http"
-    "strconv"
+	"encoding/json"
+	"io"
+	"net/http"
+	"strconv"
+	"strings"
+	"fmt"
 )
 
 func GetOrderHandler(w http.ResponseWriter, r *http.Request){
 
 		if r.Method != http.MethodGet{
-		writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "Заказ не найден")
+		writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "Метод не поддерживается")
 			return
 		}
-		writeJSON(w, http.StatusOK, orders)
+		writeJSON(w, http.StatusOK, ordersDTO)
 		return
 
 	}
 
 func GetIdHandler(w http.ResponseWriter, r *http.Request){
-		id := r.PathValue("id") 
+		id := r.PathValue("id") // вытаскиваем id из пути/конкретный заказ клиента
 		if r.Method != http.MethodGet{
-			writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "Метод не обнаружен" )
+			writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "Метод не поддерживается" )
+			// отправка ошибки 405
 			return 
 		}
+
+		fmt.Println("DEBUG: r.URL.Path =", r.URL.Path)
+		fmt.Println("DEBUG: r.PathValue('id') =", r.PathValue("id"))
+		
 
 		idInt, err := strconv.Atoi(id)
 		if err != nil {
 			
-			writeError(w, http.StatusBadRequest, "INVALID_REQUEST", "Некорректный запрос")
-		
+			writeError(w, http.StatusBadRequest, "INVALID_REQUEST", "Неверный запрос")
 			return
 		}
-		
+	
 		
 
-		for _, current := range orders {
-
-			
+		for _, current := range details {
 			if current.ID == idInt {
+
 				writeJSON(w, http.StatusOK, current)
 				return
 			}
@@ -49,66 +54,42 @@ func GetIdHandler(w http.ResponseWriter, r *http.Request){
 
 func PostLoginHandler(w http.ResponseWriter, r *http.Request){	
 	if r.Method != http.MethodPost{
-		writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "HTTP-запрос не поддерживается")
+		writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "Метод не поддерживается")
 		return
 		}
 
-		var login LoginRequest
-
-		err := json.NewDecoder(r.Body).Decode(&login)
+		var req LoginRequest
+		
+		err := json.NewDecoder(r.Body).Decode(&req)
 		if err != nil{ 
 			writeError(w, http.StatusBadRequest, "VALIDATION_ERROR", "Неправильный запрос")
 			return
 		}
 
-		if login.Login != "client@example.com" || login.Password != "password"{
+		if req.Login != "client@example.com" || req.Password != "password"{
 		writeError(w, http.StatusUnauthorized, "INVALID_CREDENTIALS", "Неправильный логин или пароль")
 		return
 		}
-
 		writeJSON(w, http.StatusOK, map[string]string{"token": "fake-token"})
 	}
 
 
 func PostCommentHandler(w http.ResponseWriter, r *http.Request){
 	id := r.PathValue("id")
+	
 		if r.Method != http.MethodPost {
 		writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "Метод не поддерживается")
 		return
 	}
 	idInt2, err := strconv.Atoi(id)
+
 	if err != nil{
 			writeError(w, http.StatusBadRequest, "INVALID_REQUEST", "Некорректный запрос")
 			return
 	}
+
 	var found bool
-	for _, new_current := range orders{
-		if new_current.ID == idInt2{
-			found = true
-			break
-		}
-	}
-	if found == false{
-		writeError(w, http.StatusNotFound, "STATUS_NOT_FOUND", "Статус не найден")
-		return
-	}
-
-	
-	if r.Method != http.MethodPost{
-		writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "Метод не найден")
-		return
-	}
-	id = r.PathValue("id")
-
-	idInt2, err = strconv.Atoi(id)
-
-	if err != nil{
-			writeError(w, http.StatusBadRequest, "INVALID_REQUEST", "Неверный запрос")
-		return
-	}
-
-
-	for _, new_current := range orders{
+	for _, new_current := range ordersDTO{
 		if new_current.ID == idInt2{
 			found = true
 			break
@@ -116,28 +97,22 @@ func PostCommentHandler(w http.ResponseWriter, r *http.Request){
 	}
 	if found == false{
 		writeError(w, http.StatusNotFound, "ORDER_NOT_FOUND", "Заказ не найден")
-		return 
+		return
 	}
 
-
-		
 		var comment Comment
 		defer r.Body.Close()
 		bodyBytes, err := io.ReadAll(r.Body)
-		 
-		
 		err = json.Unmarshal(bodyBytes, &comment) 
 		if err != nil{
 			writeError(w, http.StatusBadRequest, "VALIDATION_ERROR", "Некорректный JSON")
 			return
 		}
-
-		
-		if comment.Text == ""{
+		if strings.TrimSpace(comment.Text) == ""{
 			writeError(w, http.StatusBadRequest, "VALIDATION_ERROR", "Комментарий не должен быть пустым")
 			return
 		}
-		writeJSON(w, http.StatusOK, map[string]string{"message": "comment sent"})
+		writeJSON(w, http.StatusOK, map[string]string{"message": "Комментарий отправлен. Данные обновятся после синхронизации."})
 }
 
 
@@ -151,7 +126,7 @@ func GetProfileHandler(w http.ResponseWriter, r *http.Request){
 
 func GetDocumentsHandler(w http.ResponseWriter, r *http.Request){
 	if r.Method != http.MethodGet{
-		writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "Статус не доступен")
+		writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "Метод не поддерживается")
 		return
 	}
 	id := r.PathValue("id")
@@ -163,7 +138,7 @@ func GetDocumentsHandler(w http.ResponseWriter, r *http.Request){
 	}
 		
 		var res bool
-		for _, Order := range orders{
+		for _, Order := range ordersDTO{
 			
 			
 				if Order.ID == id2{
@@ -176,9 +151,8 @@ func GetDocumentsHandler(w http.ResponseWriter, r *http.Request){
 				return 
 			}
 
-
-				
-			filtered := make([]Document, 0)
+	
+			filtered := make([]DocumentDTO, 0)
 			for _, doc := range documents{
 				if doc.OrderID == id2{
 					filtered = append(filtered, doc)
