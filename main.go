@@ -3,9 +3,18 @@ package main
 import (
 	"log"
 	"net/http"
+
+	
 )
 
 func main() {
+	
+	db, err := InitDB()
+	if err != nil{
+		log.Fatal("Нет подключения к БД", err)
+	}
+	defer db.Close()
+
 
 	
 	http.HandleFunc("/api/cabinet/auth/login", PostLoginHandler)
@@ -26,3 +35,5 @@ func main() {
 	// запуск по порталу
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
+
+	
