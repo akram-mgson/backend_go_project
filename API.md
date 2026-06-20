@@ -1,9 +1,57 @@
 Описание эндпоинтов:
+
 Метод / Путь
 GET /api/cabinet/orders - список заказов
+Source: mock
+Response body: (ответ в файле storage.go)
+Успешный ответ: 
+	{	
+		ID: 			   40364,
+	 	Number: 		   "ЗК-2024-0901", 
+		Title: 			   "Насосная станция НС-150",
+		StatusCode: 	   "C1:NEW",
+		StatusGroup: 	   "NEW",
+		StatusLabel: 	   "Новый",
+		Date:		       "2026-05-21",
+		Equipment:		   "Насосная станция НС-150",
+		Quantity:  		    1,
+		QuotationValidTo:  "2026-06-20",
+		InvoiceNumber:	   "СЧ-123",
+		InvoiceValidTo:	   "2026-06-20",
+	},
 
-Ответ - [{"id":40364,"title":"Заказ №1","stageId":"C1:NEW"},
-		{"id":40365,"title":"Заказ №2","stageId":"C1:WON"}]
+	{	
+		ID: 			   40365,
+	 	Number: 		   "ЗК-2024-0902", 
+		Title: 			   "Насосная станция НС-151",
+		StatusCode: 	   "C1:NEW",
+		StatusGroup: 	   "NEW",
+		StatusLabel: 	   "Новый",
+		Date:		       "2026-05-21",
+		Equipment:		   "Насосная станция НС-151",
+		Quantity:  		    1,
+		QuotationValidTo:  "2026-06-20",
+		InvoiceNumber:	   "СЧ-124",
+		InvoiceValidTo:	   "2026-06-20",
+
+	},
+
+	{
+		ID: 			   40366,
+	 	Number: 		   "ЗК-2024-0903", 
+		Title: 			   "Насосная станция НС-152",
+		StatusCode: 	   "C1:NEW",
+		StatusGroup: 	   "NEW",
+		StatusLabel: 	   "Новый",
+		Date:		       "2026-05-21",
+		Equipment:		   "Насосная станция НС-152",
+		Quantity:  		    1,
+		QuotationValidTo:  "2026-06-20",
+		InvoiceNumber:	   "СЧ-125",
+		InvoiceValidTo:	   "2026-06-20",
+	},
+
+Ошибка: {"code": "METHOD_NOT_ALLOWED", "message": "Метод не поддерживается"}
 
 
 Пользовательский интерфейс:
@@ -13,16 +61,38 @@ GET /api/cabinet/orders - список заказов
 
 Метод / Путь
 GET /api/cabinet/orders/{id} - карточка заказов
+Auth required: yes
+Source: mock
+Responce body: 
 
-Ответ - {"id":40364,"title":"Заказ №1","stageId":"C1:NEW"}
+Успешный ответ:
+	{
+		ID:				40364,
+		Number:	 		"ЗК-2024-0901",
+		Title: 			"Насосная станция НС-150",
+		StatusCode: 	"C1:NEW",
+		StatusGroup: 	"NEW",
+		StatusLabel: 	"Новый",
+		Equipment: 		"Насосная станция НС-150",
+		Quantity: 		1,
+		PaymentPercent: 50,
+		Category: 		"Оборудование",
+		DeliveryType: 	"ТК",
+		DeliveryAddress: "Москва, ул. Ленина",
+		Consignee: 		"Покупатель",
+		Payer: 			"Покупатель",
+		TransportCompany: "СДЭК",
+		TransportWaybill: "ТН-123456",
+		PublicComment: 	  "Нет комментариев",
+},
+
 
 Ошибки:
 
-INVALID_REQUEST (400) - браузер отправил запрос на сайт с ошибкой
-ORDER_NOT_FOUND (404) - страница или файл не найдены
-
+{"code": "METHOD_NOT_ALLOWED", "message": "Метод не поддерживается"}
 {"code": "INVALID_REQUEST", "message": "Неверный запрос"}
 {"code": "ORDER_NOT_FOUND", "message": "Заказ не найден"}
+
 
 Пользовательский интерфейс:
 
@@ -32,44 +102,43 @@ ORDER_NOT_FOUND (404) - страница или файл не найдены
 
 Метод / Путь
 POST /api/cabinet/orders/{id}/comment
-Ответ - {"message": "comment sent"}
-Ошибки - VALIDATION_ERROR (400) - Неправильный запрос
-{"code": "VALIDATION_ERROR", "message": "Неправильный запрос"}
+Auth required: yes 
+Source: mock
+Request body: {"text": "текст комментария"}
+Успешный ответ - {"message": "Комментарий отправлен. Данные обновятся после синхронизации."}
+
+Ошибки:
+{"code": "METHOD_NOT_ALLOWED", "message": "Метод не поддерживается"}
+{"code": "INVALID_REQUEST",    "message": "Некорректный запрос"}
+{"code": "ORDER_NOT_FOUND",    "message": "Заказ не найден"}
+{"code": "VALIDATION_ERROR",   "message": "Некорректный JSON"}
+{"code": "ERROR",   "message": "Комментарий не должен быть пустым"}
+
 
 
 Метод / Путь
 POST /api/cabinet/auth/login
-Request:
-{
-"login": "[client@example.com](mailto:client@example.com)",
-"password": "password"
-}
-Response:
-{
-	"token": "fake-token"
-}
-Errors:
+Auth required: no
+Source: mock
+Request body: {"login": "client@example.com", "password": "password"}
+Response body: {"token": "fake-token"}
 
-	{
-		"code":"INVALID_CREDENTIALS",
-		"message": "Неверный логин и пароль"
-	}
-
-
-Ответ - {"token": "fake-token"}
+Успешный ответ: 
+{"token": "fake-token"}
 
 Ошибки:
-METHOD_NOT_ALLOWED (405) - если не устанавливаем POST
-INVALID_CREDENTIALS (401) - неправильный логин или пароль
-
 
 {"code": "METHOD_NOT_ALLOWED", "message": "Метод не поддерживается"}
-{"code": "INVALID_CREDENTIALS", "message": "Неправильный логин и пароль"}
+{"code": "VALIDATION_ERROR",  "message": "Неправильный запрос"}
+{"code": "INVALID_CREDENTIALS", "message": "Неправильный логин или пароль"}
 
 
 Метод / Путь
 GET /api/cabinet/profile
-Ответ - {"phone_number":"11111111","email":"i_ivanov@example.ru","manager":"Ivan Ivanov"}
+Auth requiered: yes
+Source: mock
+Responce body: {"phone_number":"11111111","email":"i_ivanov@example.ru","manager":"Ivan Ivanov"}
+Успешный ответ - {"phone_number":"11111111","email":"i_ivanov@example.ru","manager":"Ivan Ivanov"}
 Ошибки - METHOD_NOT_ALLOWED (405)
 {"code": "METHOD_NOT_ALLOWED", "message": "Метод не поддерживается"}
 
@@ -79,10 +148,11 @@ GET /api/cabinet/profile
 TODO / planned
 Метод / Путь
 POST /api/cabinet/auth/logout
-Ответ - {"message": "logged out"}
+Source: mock
+Response body:
+Успешный ответ - {"message": "logged out"}
+
 Ошибки:
-METHOD_NOT_ALLOWED (405) - если метод не POST
-UNAUTHORIZED (401) - нет токена
 Клиент имеет возможность выйти из платформы
 {"code": "METHOD_NOT_ALLOWED", "message": "Метод не поддерживается"}
 {"code": "UNAUTHORIZED", "message": "Не авторизован"}
@@ -92,32 +162,30 @@ UNAUTHORIZED (401) - нет токена
 //TODO / planned
 Метод / Путь
 GET /api/cabinet/auth/me
+Source: mock
+Response body: {"name": "Ivan", "email": "i_ivanov@test.ru", "area": "project-manager"}
 Ответ - {"name": "Ivan", "email": "i_ivanov@test.ru", "area": "project-manager"}
 Ошибки:
-UNAUTHORIZED (401) - Запрос отклонен из-за отсутствия, недействительности, просрочки утечки данных
-ACCESS_DENIED (403) - нет прав
-METHOD_NOT_ALLOWED (405) - если метод не GET
-
-{"code": "UNAUTHORIZED", "message": "Не авторизован"}
+{"code": "METHOD_NOT_ALLOWED", "message": "Метод не поддерживается"}
 {"code": "ACCESS_DENIED", "message": "Доступ запрещен"}
-{"code": "METHOD_NOT_ALLOWED", "message": "Метод не доступен"}
-
+{"code": "UNAUTHORIZED", "message": "Не авторизован"}
 
 Клиент имеет доступ к платформе при успешной авторизации
 
 Метод / Путь
 GET /api/cabinet/orders/{id}/documents
-Ответ - [{ID: 1, Title: "Спецификация", Body: "В процессе", OrderID: 40366}]
+Auth required: yes
+Source: mock
+Успешный ответ - [{"ID": 1, "order_id": 40366, "title": "Спецификация", "type": "specification", "VisibleForClient": true}],
+
 Ошибки:
-INVALID_REQUEST - 400 (если id - не число)
-ORDER_NOT_FOUND (отсутствие заказа)
-Клиент видит список документов, привязанных к определенному заказу
-
-{"code": "INVALID_REQUEST", "message": "Ошибка валидации"}
-
+{"code": "METHOD_NOT_ALLOWED", "message": "Метод не поддерживается"}
+{"code": "INVALID_REQUEST", "message": "Неверный запрос"}
+{"code": "ORDER_NOT_FOUND", "message": "Заказ не найден"}
 
 
 Формат ошибок возвращается в следующем формате:
+
 
 {"code": "ORDER_NOT_FOUND", "message": "Заказ не найден"}
 
@@ -139,6 +207,13 @@ disk.file.list - файлы с заказами
 tasks.task.add - создание задачи менеджеру
 user.get - данные менеджера
 
+Источники данных:
 
+1. GET /api/cabinet/orders читает данные из Timeweb DB.
+2. GET /api/cabinet/orders/{id} читает данные из Timeweb DB.
+3. GET /api/cabinet/orders/{id}/documents читает метаданные документов из Timeweb DB.
+4. raw_data не отдается frontend-у напрямую.
+5. Bitrix24 используется для записи комментариев, файлов, запросов КП/счета и задач менеджеру.
+6. Timeweb DB обновляется каждые 30 минут.
 
 
