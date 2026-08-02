@@ -28,7 +28,7 @@ type OrderDetailsDTO struct {
 	Category         string `json:"category"`
 	DeliveryType     string `json:"delivery_type"`
 	DeliveryAddress  string `json:"delivery_address"`
-	Consignee        string `json:"consigne"`
+	Consignee        string `json:"consignee"`
 	Payer            string `json:"payer"`
 	TransportCompany string `json:"transport_company"`
 	TransportWaybill string `json:"transport_waybill"`
@@ -73,10 +73,9 @@ type LoginRequest struct {
 	Login    string `json:"login"`
 	Password string `json:"password"`
 }
-type LoginResponce struct {
+type LoginResponse struct {
 	Token string `json:"token"`
 }
-
 
 type LogResp struct {
 	Token string `json:"token"`
