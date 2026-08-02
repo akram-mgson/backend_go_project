@@ -16,7 +16,7 @@ Response body: (ответ в файле storage.go)
 		equipment:		   "Насосная станция НС-150",
 		quantity:  		    1,
 		quotation_valid_to:  "2026-06-20",
-		invoice_Number:	   "СЧ-123",
+		invoice_number:	   "СЧ-123",
 		invoice_valid_to:	   "2026-06-20",
 	},
 
@@ -112,7 +112,7 @@ Request body: {"text": "текст комментария"}
 {"code": "INVALID_REQUEST",    "message": "Некорректный запрос"}
 {"code": "ORDER_NOT_FOUND",    "message": "Заказ не найден"}
 {"code": "VALIDATION_ERROR",   "message": "Некорректный JSON"}
-{"code": "ERROR",   "message": "Комментарий не должен быть пустым"}
+{"code": "VALIDATION_ERROR",   "message": "Комментарий не должен быть пустым"}
 
 
 
@@ -145,12 +145,13 @@ Responce body: {"phone_number":"11111111","email":"i_ivanov@example.ru","manager
 
 Клиент видит свои данные
 
-TODO / planned
+
 Метод / Путь
 POST /api/cabinet/auth/logout
+Auth required: да
 Source: mock
 Response body:
-Успешный ответ - {"message": "logged out"}
+Успешный ответ - {"text": "logged out"}
 
 Ошибки:
 Клиент имеет возможность выйти из платформы
@@ -159,15 +160,15 @@ Response body:
 
 
 
-//TODO / planned
+
 Метод / Путь
 GET /api/cabinet/auth/me
+Auth required: да
 Source: mock
-Response body: {"name": "Ivan", "email": "i_ivanov@test.ru", "area": "project-manager"}
-Ответ - {"name": "Ivan", "email": "i_ivanov@test.ru", "area": "project-manager"}
+Response body: {"name": "Ivan", "email": "i_ivanov@test.ru"}
+Ответ - {"name": "Ivan", "email": "i_ivanov@test.com"}
 Ошибки:
 {"code": "METHOD_NOT_ALLOWED", "message": "Метод не поддерживается"}
-{"code": "ACCESS_DENIED", "message": "Доступ запрещен"}
 {"code": "UNAUTHORIZED", "message": "Не авторизован"}
 
 Клиент имеет доступ к платформе при успешной авторизации
@@ -176,7 +177,7 @@ Response body: {"name": "Ivan", "email": "i_ivanov@test.ru", "area": "project-ma
 GET /api/cabinet/orders/{id}/documents
 Auth required: yes
 Source: mock
-Успешный ответ - [{"ID": 1, "order_id": 40366, "title": "Спецификация", "type": "specification", "VisibleForClient": true}],
+Успешный ответ - [{"id": 1, "order_id": 40366, "title": "Спецификация", "type": "specification", "visible_for_client": true}],
 
 Ошибки:
 {"code": "METHOD_NOT_ALLOWED", "message": "Метод не поддерживается"}
@@ -209,11 +210,10 @@ user.get - данные менеджера
 
 Источники данных:
 
-1. GET /api/cabinet/orders читает данные.
-2. GET /api/cabinet/orders/{id} читает данные из Timeweb DB.
-3. GET /api/cabinet/orders/{id}/documents читает метаданные документов из Timeweb DB.
-4. raw_data не отдается frontend-у напрямую.
-5. Bitrix24 используется для записи комментариев, файлов, запросов КП/счета и задач менеджеру.
-6. Timeweb DB обновляется каждые 30 минут.
+Эндпоинты использую mock - данные
 
-
+- `ordersDTO` — список заказов
+- `details` — детали заказов
+- `documents` — документы
+- `profile` — профиль клиента
+- `req` — учётные данные для логина
