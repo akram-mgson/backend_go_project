@@ -20,7 +20,7 @@ func GetOrderHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetIdHandler(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id") // вытаскиваем id из пути/конкретный заказ клиента
+	id := r.PathValue("id") 
 	if r.Method != http.MethodGet {
 		writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "Метод не поддерживается")
 		return
@@ -33,14 +33,16 @@ func GetIdHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	for _, current := range details {
+
 		if current.ID == idInt {
+
 			writeJSON(w, http.StatusOK, current)
 			return
 		}
 	}
 	writeError(w, http.StatusNotFound, "ORDER_NOT_FOUND", "Заказ не найден")
+
 	return
 }
 
@@ -75,6 +77,7 @@ func PostCommentHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 
 	if r.Method != http.MethodPost {
+		// установка заголовки
 		writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "Метод не поддерживается")
 		return
 	}
@@ -101,14 +104,12 @@ func PostCommentHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	bodyBytes, err := io.ReadAll(r.Body)
 
-	
-	err = json.Unmarshal(bodyBytes, &comment) 
+	err = json.Unmarshal(bodyBytes, &comment) // передаю адрес переменной
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "VALIDATION_ERROR", "Некорректный JSON")
 		return
 	}
 
-	
 	if strings.TrimSpace(comment.Text) == "" {
 		writeError(w, http.StatusBadRequest, "VALIDATION_ERROR", "Комментарий не должен быть пустым")
 		return
@@ -137,7 +138,6 @@ func GetDocumentsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	var res bool
 	for _, Order := range ordersDTO {
 
@@ -151,7 +151,7 @@ func GetDocumentsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	
+
 	filtered := make([]DocumentDTO, 0)
 	for _, doc := range documents {
 		if doc.OrderID == id2 && doc.VisibleForClient == true {
@@ -186,7 +186,6 @@ func GetAuthHandler(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusMethodNotAllowed, "METHOD_NOT_ALLOWED", "Метод не поддерживается")
 		return
 	}
-	// создал переменную в обработчике
 	user := Auth{Name: "Ivan", Email: "i_ivanov@test.com"}
 	writeJSON(w, http.StatusOK, user)
 }
