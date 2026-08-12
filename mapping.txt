@@ -1,0 +1,10 @@
+id (БД) -> ID (номер заказа)
+title (БД) -> Title (название заголовка)
+stage_id -> StatusCode (статус)
+contact_id - для проверки прав
+company_id - дл проверки компании
+assigned_by_id - ответсвенный
+opportunity
+begindate - дата создания
+closedate
+comments - комментарии
